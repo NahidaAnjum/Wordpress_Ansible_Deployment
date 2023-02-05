@@ -1,0 +1,12 @@
+---
+# tasks file for mysql
+- name: Create a MySQL database
+  mysql_db: name={{ wp_mysql_db }} state=present login_user=root login_password=password
+  become: yes
+
+- name: create mysql user
+  mysql_user:
+    name={{wp_mysql_user}}
+    login_password={{wp_mysql_password}}
+    priv=*.*:ALL
+  become: yes

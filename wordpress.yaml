@@ -1,1 +1,17 @@
-
+---
+- name: Install python in target node with ansible
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: install python 3
+    raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+- hosts: all
+  name: Execute roles
+  become: yes
+  roles:
+    - ec2
+    - server
+    - php
+    - mysql
+    - {role: 'wordpress', tags: 'wordpress'}

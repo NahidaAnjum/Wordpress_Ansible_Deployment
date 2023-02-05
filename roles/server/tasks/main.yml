@@ -1,0 +1,21 @@
+---
+# tasks file for server
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+- name: install pip
+  become: yes
+  apt:
+    name: python3-pip
+    state: present
+- name: Install required software
+  apt:
+    name: [php, mysql-server, php-mysql, apache2, libapache2-mod-php]
+    state: present
+- name: Install PyMySQL
+  become: yes
+  pip:
+    name: PyMySQL
+    state: present
+    executable: pip3

@@ -1,0 +1,7 @@
+---
+# tasks file for php
+- name: Install php extensions
+  become: yes
+  apt:
+    name: [php-gd, php-ssh2]
+    state: present
