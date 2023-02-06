@@ -1,2 +1,6 @@
 ---
 # defaults file for wordpress
+
+#HTTP Settings
+http_host: "3.12.166.152"
+http_port: "80"

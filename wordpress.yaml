@@ -1,4 +1,20 @@
 ---
+- name: Check and start EC2 instance
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Retrieve instance state
+      ec2_instance_info:
+        instance_ids: my-ansible-server
+        region: us-east-2  
+      register: ec2_instance
+
+    - name: Start instance if stopped
+      ec2:
+        instance_ids: my-ansible-server
+        region: us-east-2 
+        state: started
+      when: ec2_instance.instances[0].state.name == 'stopped'
 - name: Install python in target node with ansible
   hosts: all
   become: true
@@ -10,8 +26,9 @@
   name: Execute roles
   become: yes
   roles:
-    - ec2
+    # - {role: 'ec2', tags: 'ec2'}
     - server
     - php
     - mysql
     - {role: 'wordpress', tags: 'wordpress'}
+    - ec2-availability 

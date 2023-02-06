@@ -1,0 +1,51 @@
+---
+# tasks file for ec2-availability
+
+- name: Set up high availability architecture
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create a load balancer
+      elb_loadbalancer:
+        name: my-load-balancer
+        region: us-east-2
+        subnets:
+          - subnet-0123456789abcdef0
+          - subnet-0123456789abcdef1
+        security_groups:
+          - sg-0123456789abcdef0
+        listeners:
+          - protocol: HTTP
+            load_balancer_port: 80
+            instance_port: 80
+        state: present
+
+    - name: Create a launch configuration
+      ec2_lc:
+        name: my-launch-config
+        region: us-east-2
+        image_id: ami-044855ba95f77f891
+        instance_type: t2.micro
+        key_name: my-key-pair
+        security_groups:
+          - sg-0123456789abcdef0
+        user_data: |
+          #!/usr/bin/env bash
+          echo "This is user data."
+        state: present
+
+    - name: Create an auto scaling group
+      ec2_asg:
+        name: my-auto-scaling-group
+        region: us-east-2
+        launch_config_name: my-launch-config
+        min_size: 2
+        max_size: 4
+        desired_capacity: 2
+        load_balancers:
+          - my-load-balancer
+        vpc_zone_identifier:
+          - subnet-0123456789abcdef0
+          - subnet-0123456789abcdef1
+        state: present
+

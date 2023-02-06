@@ -6,22 +6,22 @@
     dest=/tmp/wordpress.tar.gz
     validate_certs=no
 - name: Extract WordPress
-  unarchive: src=/tmp/wordpress.tar.gz dest=/var/www/ copy=no
+  unarchive: src=/tmp/wordpress.tar.gz dest=/var/www/html/ copy=no
   become: yes
-- name: Update default Apache site
-  become: yes
-  lineinfile:
-    dest=/etc/apache2/sites-enabled/000-default.conf
-    regexp="(.)+Document Root /var/www/html"
-    line="Document Root /var/www/wordpress"
-  notify:
-    - restart apache
+    #- name: Update default Apache site
+    #become: yes
+    #lineinfile:
+    #dest=/etc/apache2/sites-enabled/000-default.conf
+    #regexp="(.)+Document Root /var/www/html"
+    #line="Document Root /var/www/wordpress"
+    #notify:
+    #- restart apache
 - name: Copy sample config file
-  command: mv /var/www/wordpress/wp-config-sample.php /var/www/wordpress/wp-config.php creates=/var/www/wordpress/wp-config.php
+  command: mv /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php creates=/var/www/html/wordpress/wp-config.php
   become: yes
 - name: Update WordPress config file
   lineinfile:
-    dest=/var/www/wordpress/wp-config.php
+    dest=/var/www/html/wordpress/wp-config.php
     regexp="{{item.regexp }}"
     line="{{item.line }}"
   with_items:
