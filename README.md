@@ -44,3 +44,7 @@ Steps To Install WordPress Using Ansible:
 4. Create Ansible roles using Ansible galaxy for php, mysql, wordpress, server etc.
 5. Run Ansible playbook - wordress.yaml
 6. After successful run of ansible playbook, visit the IP of the server to continue setting up the wordpress site.
+7. Add Autoscaling and loadbalancer AWS Services for high availability
+8. create a docker file which runs this ansible playbook wordpress.yml and runs a script which adds post every hour.
+
+
